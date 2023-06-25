@@ -3,15 +3,52 @@
     <body>
         <div id="root"></div>
     </body>
-    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>    
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        const root = document.getElementById("root"); 
+        
+        // function Btn({ text }){ 로 하면 아래에서 props를 다시 호출할 필요 없음
+        function Btn({ text, changeValue, fontSize=12 }){ 
+            return (
+                <button
+                    onClick={changeValue} 
+                    style={{
+                        backgroundColor:"tomato",
+                        color:"white",
+                        padding:"10px 20px",
+                        border:0,
+                        borderRadius:10, 
+                        fontSize
+                    }}    
+                >
+                    {text}
+                </button>
+                
+            );
+        }
 
+        Btn.propTypes = {
+            text: PropTypes.string,
+            fontSize: PropTypes.number,
+        }
+        
+        // 요소가 바뀌지 않는경우 전체가 업데이트 되는것을 막아줌
+        // const MemorizedBtn = React.memo(Btn)
+        
+        function App() {
+            const [value, setValue] = React.useState("Save Changes");
+            const changeValue = () => setValue("Revert Changes")
+            return(
+                <div>
+                    <Btn text={value} changeValue={changeValue} fontSize={18}/>
+                    <Btn text="asdf" />    
+                </div>
+            );
+        }
 
-
-
+        const root = document.getElementById("root")
         ReactDOM.render(<App />, root);
     </script>
 
